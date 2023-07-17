@@ -3,7 +3,7 @@ import {FastifyEnvOptions} from "@fastify/env";
 
 const schema: EnvSchemaData = {
     type: 'object',
-    required: ['PORT', 'ELASTIC_USERNAME', 'ELASTIC_PASSWORD', 'ELASTIC_URI'],
+    required: ['PORT', 'ELASTIC_USERNAME', 'ELASTIC_PASSWORD', 'ELASTIC_URL'],
     properties: {
         PORT: {
             type: 'number',
@@ -15,7 +15,7 @@ const schema: EnvSchemaData = {
         ELASTIC_PASSWORD: {
             type: 'string'
         },
-        ELASTIC_URI: {
+        ELASTIC_URL: {
             type: 'string'
         }
     }

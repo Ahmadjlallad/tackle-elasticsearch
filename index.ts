@@ -1,22 +1,39 @@
 import options from "./env-options";
 import fastifyEnv from "@fastify/env";
 import server from "./src/server";
+import client, {Elastic} from "./src/elastic/client";
 
-server.register(
-    fastifyEnv,
-    options
-);
+declare module 'fastify' {
+    export interface FastifyInstance {
+        elastic: Elastic;
+    }
+}
 
-(async () => {
+
+
+const start = async () => {
     try {
-        let port = 5454;
-        if (process.env.PORT) {
-            port = process.env.PORT
-        }
+        await server.register(
+            fastifyEnv,
+            options
+        );
+
+        await server.register(
+            client,
+            {
+                node: process.env.ELASTIC_URL,
+                auth: {
+                    username: process.env.ELASTIC_USERNAME,
+                    password: process.env.ELASTIC_PASSWORD
+                }
+            }
+        );
+
         await server.ready()
-        await server.listen({port})
+        await server.listen({port: process.env.PORT})
     } catch (error) {
         server.log.error(error)
         process.exit(1)
     }
-})()
+}
+start();
